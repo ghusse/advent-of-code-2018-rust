@@ -1,6 +1,6 @@
 [package]
 name = "advent"
 version = "0.1.0"
-authors = ["Guillaume Gautreau <guillaume.gautreau@afidium.com>"]
+authors = ["Guillaume Gautreau <guillaume@ghusse.com>"]
 
 [dependencies]
