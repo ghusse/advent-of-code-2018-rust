@@ -5,26 +5,27 @@ use std::io::BufReader;
 use std::iter::Iterator;
 
 pub fn solve() {
-    solve1();
-    solve2();
+    let frequency_changes = get_frequency_changes();
+
+    solve1(&frequency_changes);
+    solve2(&frequency_changes);
 }
 
-fn solve1() {
-    let sum: i64 = get_frequency_changes().iter().sum();
+fn solve1(frequency_changes: &Vec<i64>) {
+    let sum: i64 = frequency_changes.iter().sum();
 
     println!("Result day1 1/2 {}", sum);
 }
 
-fn solve2() {
-    let changes: Vec<i64> = get_frequency_changes();
+fn solve2(frequency_changes: &Vec<i64>) {
     let mut encountered: HashSet<i64> = HashSet::new();
     let mut index = 0;
     let mut sum = 0;
 
     while !encountered.contains(&sum) {
         encountered.insert(sum);
-        sum += changes[index];
-        index = (index + 1) % changes.len();
+        sum += frequency_changes[index];
+        index = (index + 1) % frequency_changes.len();
     }
 
     println!("Result day1 2/2 {}", sum);
