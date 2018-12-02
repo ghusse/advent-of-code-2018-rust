@@ -1,3 +1,4 @@
+use measure::measure_and_print;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::fs::File;
@@ -19,8 +20,13 @@ struct Similar {
 pub fn solve() {
   let ids = get_ids();
 
-  solve1(&ids);
-  solve2(&ids);
+  measure_and_print(|| {
+    solve1(&ids);
+  });
+
+  measure_and_print(|| {
+    solve2(&ids);
+  });
 }
 
 fn solve1(ids: &Vec<String>) {

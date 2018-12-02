@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Guillaume Gautreau <guillaume@ghusse.com>"]
 
 [dependencies]
+elapsed = "0.1"

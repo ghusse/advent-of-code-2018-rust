@@ -1,3 +1,5 @@
+
+use measure::measure_and_print;
 use std::collections::HashSet;
 use std::fs::File;
 use std::io::BufRead;
@@ -7,8 +9,13 @@ use std::iter::Iterator;
 pub fn solve() {
     let frequency_changes = get_frequency_changes();
 
-    solve1(&frequency_changes);
-    solve2(&frequency_changes);
+    measure_and_print(|| {
+        solve1(&frequency_changes);
+    });
+
+    measure_and_print(|| {
+        solve2(&frequency_changes);
+    });
 }
 
 fn solve1(frequency_changes: &Vec<i64>) {
