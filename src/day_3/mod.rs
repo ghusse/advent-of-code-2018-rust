@@ -83,7 +83,7 @@ fn solve2(claims: &Vec<Claim>, fabric: &Vec<Vec<u32>>) {
   }
 }
 
-fn read_claims<'a>() -> Vec<Claim> {
+fn read_claims() -> Vec<Claim> {
   let input_file = File::open("src/day_3/input.txt").expect("file not found");
   let parser = Regex::new("^#(\\d+) @ (\\d+),(\\d+): (\\d+)x(\\d+)$").unwrap();
 
@@ -94,12 +94,20 @@ fn read_claims<'a>() -> Vec<Claim> {
       let parsed = parser.captures(&line[..]).unwrap();
 
       return Claim {
-        id: parsed.get(1).unwrap().as_str().parse::<u32>().unwrap(),
-        x: parsed.get(2).unwrap().as_str().parse::<usize>().unwrap(),
-        y: parsed.get(3).unwrap().as_str().parse::<usize>().unwrap(),
-        width: parsed.get(4).unwrap().as_str().parse::<usize>().unwrap(),
-        height: parsed.get(5).unwrap().as_str().parse::<usize>().unwrap(),
+        id: parse(&parsed, 1),
+        x: parse(&parsed, 2),
+        y: parse(&parsed, 3),
+        width: parse(&parsed, 4),
+        height: parse(&parsed, 5),
       };
     })
     .collect();
+}
+
+fn parse<T>(captures: &regex::Captures, index: usize) -> T
+where
+  T: core::str::FromStr,
+  T::Err: std::fmt::Debug,
+{
+  return captures.get(index).unwrap().as_str().parse().unwrap();
 }
