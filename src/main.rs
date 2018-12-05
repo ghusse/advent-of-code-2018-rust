@@ -1,9 +1,13 @@
+extern crate core;
+extern crate datetime;
 extern crate elapsed;
+extern crate quickersort;
 extern crate regex;
 
 mod day_1;
 mod day_2;
 mod day_3;
+mod day_4;
 pub mod measure;
 
 fn main() {
@@ -14,5 +18,8 @@ fn main() {
     println!();
 
     day_3::solve();
+    println!();
+
+    day_4::solve();
     println!();
 }
