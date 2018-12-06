@@ -8,6 +8,7 @@ mod day_1;
 mod day_2;
 mod day_3;
 mod day_4;
+mod day_5;
 pub mod measure;
 
 fn main() {
@@ -21,5 +22,8 @@ fn main() {
     println!();
 
     day_4::solve();
+    println!();
+
+    day_5::solve();
     println!();
 }

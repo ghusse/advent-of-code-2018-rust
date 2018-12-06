@@ -50,8 +50,15 @@ struct Summary {
 
 pub fn solve() {
   let mut lines = read_lines();
-  ::quickersort::sort_by(&mut lines, &|log1, log2| log1.moment.cmp(&log2.moment));
-  let by_guard = summarize_by_guard(&lines);
+  let mut by_guard_opt: Option<Vec<Summary>> = None;
+
+  measure_and_print(|| {
+    ::quickersort::sort_by(&mut lines, &|log1, log2| log1.moment.cmp(&log2.moment));
+    by_guard_opt = Some(summarize_by_guard(&lines));
+    println!("Common part");
+  });
+
+  let by_guard = by_guard_opt.unwrap();
 
   measure_and_print(|| {
     solve1(&by_guard);
