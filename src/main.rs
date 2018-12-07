@@ -4,26 +4,46 @@ extern crate elapsed;
 extern crate quickersort;
 extern crate regex;
 
+use std::env;
+
 mod day_1;
 mod day_2;
 mod day_3;
 mod day_4;
 mod day_5;
+mod day_6;
 pub mod measure;
 
 fn main() {
-    day_1::solve();
-    println!();
+    let args: Vec<_> = env::args().collect();
 
-    day_2::solve();
-    println!();
+    if args.len() == 1 || args[1].eq("1") {
+        day_1::solve();
+        println!();
+    }
 
-    day_3::solve();
-    println!();
+    if args.len() == 1 || args[1].eq("2") {
+        day_2::solve();
+        println!();
+    }
 
-    day_4::solve();
-    println!();
+    if args.len() == 1 || args[1].eq("3") {
+        day_3::solve();
+        println!();
+    }
+    
+    if args.len() == 1 || args[1].eq("4") {
+        day_4::solve();
+        println!();
+    }
 
-    day_5::solve();
-    println!();
+    if args.len() == 1 || args[1].eq("5") {
+        day_5::solve();
+        println!();
+    }
+
+    if args.len() == 1 || args[1].eq("6") {
+        day_6::solve();
+        println!();
+    }
 }

@@ -3,12 +3,16 @@
     // Pointez pour afficher la description des attributs existants.
     // Pour plus d'informations, visitez : https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
+    "configurations": [
+
+        {
             "type": "cppvsdbg",
             "request": "launch",
             "name": "Debug 'advent' (windows)",
             "program": "${workspaceRoot}/target/debug/advent.exe",
-            "args": [],
+            "args": [
+                "6"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             "environment": [],
