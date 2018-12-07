@@ -12,6 +12,7 @@ mod day_3;
 mod day_4;
 mod day_5;
 mod day_6;
+mod day_7;
 pub mod measure;
 
 fn main() {
@@ -44,6 +45,11 @@ fn main() {
 
     if args.len() == 1 || args[1].eq("6") {
         day_6::solve();
+        println!();
+    }
+
+    if args.len() == 1 || args[1].eq("7") {
+        day_7::solve();
         println!();
     }
 }
