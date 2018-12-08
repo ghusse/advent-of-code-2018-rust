@@ -29,15 +29,15 @@ pub fn solve() {
   });
 }
 
-fn solve1(ids: &Vec<String>) {
+fn solve1(ids: &[String]) {
   let result: Result = ids.iter().fold(Result { twos: 0, threes: 0 }, |acc, id| {
-    count_twos_and_threes(acc, &id)
+    count_twos_and_threes(&acc, &id)
   });
 
   println!("Result day2 1/2 {}", result.twos * result.threes);
 }
 
-fn solve2(ids: &Vec<String>) {
+fn solve2(ids: &[String]) {
   let similar = find_two_similar(ids);
 
   match similar {
@@ -48,7 +48,7 @@ fn solve2(ids: &Vec<String>) {
   }
 }
 
-fn count_twos_and_threes(result: Result, id: &String) -> Result {
+fn count_twos_and_threes(result: &Result, id: &str) -> Result {
   let mut counts: HashMap<char, i32> = HashMap::new();
 
   for current_char in id.chars() {
@@ -69,22 +69,22 @@ fn count_twos_and_threes(result: Result, id: &String) -> Result {
     }
   }
 
-  return Result {
+  Result {
     twos: twos + diff_twos,
     threes: threes + diff_threes,
-  };
+  }
 }
 
 fn get_ids() -> Vec<String> {
   let input_file = File::open("src/day_2/input.txt").expect("file not found");
 
-  return BufReader::new(input_file)
+  BufReader::new(input_file)
     .lines()
     .map(|line| line.expect("error readding the line"))
-    .collect();
+    .collect()
 }
 
-fn find_two_similar(ids: &Vec<String>) -> Option<Similar> {
+fn find_two_similar(ids: &[String]) -> Option<Similar> {
   for index1 in 0..ids.len() - 1 {
     for index2 in index1 + 1..ids.len() {
       if differences(&ids[index1], &ids[index2]) == 1 {
@@ -96,10 +96,10 @@ fn find_two_similar(ids: &Vec<String>) -> Option<Similar> {
     }
   }
 
-  return None;
+  None
 }
 
-fn get_similar(id1: &String, id2: &String) -> String {
+fn get_similar(id1: &str, id2: &str) -> String {
   let mut result = String::new();
 
   let chars1: Vec<char> = id1.chars().collect();
@@ -114,10 +114,10 @@ fn get_similar(id1: &String, id2: &String) -> String {
     }
   }
 
-  return result;
+  result
 }
 
-fn differences(id1: &String, id2: &String) -> u64 {
+fn differences(id1: &str, id2: &str) -> u64 {
   let mut result: u64 = 0;
   let chars1: Vec<char> = id1.chars().collect();
   let chars2: Vec<char> = id2.chars().collect();
@@ -131,5 +131,5 @@ fn differences(id1: &String, id2: &String) -> u64 {
     }
   }
 
-  return result;
+  result
 }

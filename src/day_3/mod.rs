@@ -29,7 +29,7 @@ pub fn solve() {
   })
 }
 
-fn solve1(claims: &Vec<Claim>) -> Vec<Vec<u32>> {
+fn solve1(claims: &[Claim]) -> Vec<Vec<u32>> {
   let mut fabric = vec![vec![0u32; SIZE]; SIZE];
 
   for claim in claims {
@@ -45,17 +45,17 @@ fn solve1(claims: &Vec<Claim>) -> Vec<Vec<u32>> {
   for x in 0..999 {
     for y in 0..999 {
       if fabric[x][y] > 1 {
-        number = number + 1;
+        number += 1;
       }
     }
   }
 
   println!("Result day3 1/2 {}", number);
 
-  return fabric;
+  fabric
 }
 
-fn solve2(claims: &Vec<Claim>, fabric: &Vec<Vec<u32>>) {
+fn solve2(claims: &[Claim], fabric: &[Vec<u32>]) {
   let mut candidate_claims: HashSet<&Claim> = HashSet::new();
 
   claims.iter().for_each(|claim| {
@@ -72,7 +72,7 @@ fn solve2(claims: &Vec<Claim>, fabric: &Vec<Vec<u32>>) {
     }
   }
 
-  if candidate_claims.len() == 0 {
+  if candidate_claims.is_empty() {
     println!("All claims overlap");
   } else if candidate_claims.len() > 1 {
     println!("Multiple claims don't overlap: {}", candidate_claims.len());
@@ -87,21 +87,21 @@ fn read_claims() -> Vec<Claim> {
   let input_file = File::open("src/day_3/input.txt").expect("file not found");
   let parser = Regex::new("^#(\\d+) @ (\\d+),(\\d+): (\\d+)x(\\d+)$").unwrap();
 
-  return BufReader::new(input_file)
+  BufReader::new(input_file)
     .lines()
     .map(|line| line.expect("error readding the line"))
     .map(|line| {
       let parsed = parser.captures(&line[..]).unwrap();
 
-      return Claim {
+      Claim {
         id: parse(&parsed, 1),
         x: parse(&parsed, 2),
         y: parse(&parsed, 3),
         width: parse(&parsed, 4),
         height: parse(&parsed, 5),
-      };
+      }
     })
-    .collect();
+    .collect()
 }
 
 fn parse<T>(captures: &regex::Captures, index: usize) -> T
@@ -109,5 +109,5 @@ where
   T: core::str::FromStr,
   T::Err: std::fmt::Debug,
 {
-  return captures.get(index).unwrap().as_str().parse().unwrap();
+  captures.get(index).unwrap().as_str().parse().unwrap()
 }

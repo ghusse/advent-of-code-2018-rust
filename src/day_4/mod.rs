@@ -18,7 +18,7 @@ enum Action {
 }
 
 impl Action {
-  fn new(action: &str) -> Result<Self, String> {
+  fn parse(action: &str) -> Result<Self, String> {
     if action == "wakes up" {
       return Ok(Action::WakesUp);
     } else if action == "falls asleep" {
@@ -28,7 +28,7 @@ impl Action {
     let mut error = String::from("Unknown action ");
     error.push_str(action);
 
-    return Err(error);
+    Err(error)
   }
 }
 
@@ -69,11 +69,11 @@ pub fn solve() {
   });
 }
 
-fn solve1(by_guard: &Vec<Summary>) {
+fn solve1(by_guard: &[Summary]) {
   let max_asleep: Option<&Summary> = by_guard.iter().fold(None, |last, current| match last {
     None => Some(current),
     Some(candidate) => {
-      return if candidate.asleep > current.asleep {
+      if candidate.asleep > current.asleep {
         Some(candidate)
       } else {
         Some(current)
@@ -89,11 +89,11 @@ fn solve1(by_guard: &Vec<Summary>) {
   );
 }
 
-fn solve2(by_guard: &Vec<Summary>) {
+fn solve2(by_guard: &[Summary]) {
   let most_asleep: Option<&Summary> = by_guard.iter().fold(None, |last, current| match last {
     None => Some(current),
     Some(candidate) => {
-      return if candidate.best_asleep > current.best_asleep {
+      if candidate.best_asleep > current.best_asleep {
         Some(candidate)
       } else {
         Some(current)
@@ -109,7 +109,7 @@ fn solve2(by_guard: &Vec<Summary>) {
   );
 }
 
-fn summarize_by_guard(lines: &Vec<Log>) -> Vec<Summary> {
+fn summarize_by_guard(lines: &[Log]) -> Vec<Summary> {
   let mut asleep_time: HashMap<u32, Summary> = HashMap::new();
   let mut current_guard: Option<u32> = None;
   let mut last_moment: Option<LocalDateTime> = None;
@@ -159,10 +159,7 @@ fn summarize_by_guard(lines: &Vec<Log>) -> Vec<Summary> {
     last_moment = Some(log.moment);
   }
 
-  return asleep_time
-    .values()
-    .map(|summary| summary.clone())
-    .collect();
+  asleep_time.values().cloned().collect()
 }
 
 fn read_lines() -> Vec<Log> {
@@ -171,7 +168,7 @@ fn read_lines() -> Vec<Log> {
     Regex::new("^\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})\\] (?:Guard #(\\d+) )?(.*)$")
       .unwrap();
 
-  return BufReader::new(input_file)
+  BufReader::new(input_file)
     .lines()
     .map(|line| line.expect("error readding the line"))
     .map(|line| {
@@ -190,23 +187,19 @@ fn read_lines() -> Vec<Log> {
       let moment = LocalDateTime::new(date, time);
 
       match parsed.get(6) {
-        None => {
-          return Log {
-            moment,
-            guard: None,
-            action: Action::new(parsed.get(7).unwrap().as_str()).unwrap(),
-          };
-        }
-        Some(guard_capture) => {
-          return Log {
-            moment,
-            guard: Some(guard_capture.as_str().parse().unwrap()),
-            action: Action::BeginsShift,
-          };
-        }
+        None => Log {
+          moment,
+          guard: None,
+          action: Action::parse(parsed.get(7).unwrap().as_str()).unwrap(),
+        },
+        Some(guard_capture) => Log {
+          moment,
+          guard: Some(guard_capture.as_str().parse().unwrap()),
+          action: Action::BeginsShift,
+        },
       }
     })
-    .collect();
+    .collect()
 }
 
 fn parse<T>(captures: &regex::Captures, index: usize) -> T
@@ -214,5 +207,5 @@ where
   T: core::str::FromStr,
   T::Err: std::fmt::Debug,
 {
-  return captures.get(index).unwrap().as_str().parse().unwrap();
+  captures.get(index).unwrap().as_str().parse().unwrap()
 }

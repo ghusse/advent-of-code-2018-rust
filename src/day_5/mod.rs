@@ -15,11 +15,11 @@ pub fn solve() {
   });
 }
 
-fn solve1(input: &String) {
+fn solve1(input: &str) {
   println!("Result day 5 1/2 {}", react(&input));
 }
 
-fn solve2(input: &String) {
+fn solve2(input: &str) {
   let units = "azertyuiopqsdfghjklmwxcvbn";
   let mut best: Option<usize> = None;
 
@@ -41,20 +41,20 @@ fn solve2(input: &String) {
   println!("Result day 5 2/2 {}", best.unwrap());
 }
 
-fn react(input: &String) -> usize {
+fn react(input: &str) -> usize {
   let chars: Vec<char> = input.chars().collect();
 
   let mut processed_chars: Vec<&char> = Vec::with_capacity(chars.len());
   let mut next_chars: Vec<&char> = Vec::with_capacity(chars.len());
 
-  for i in 1..chars.len() + 1 {
+  for i in 1..=chars.len() {
     next_chars.push(&chars[chars.len() - i]);
   }
 
-  while next_chars.len() > 0 {
+  while !next_chars.is_empty() {
     let next = next_chars.pop().unwrap();
 
-    if processed_chars.len() == 0 {
+    if processed_chars.is_empty() {
       processed_chars.push(next);
       continue;
     }
@@ -74,14 +74,14 @@ fn react(input: &String) -> usize {
     }
   }
 
-  return processed_chars.len();
+  processed_chars.len()
 }
 
-fn remove_unit(input: &String, unit: char) -> String {
+fn remove_unit(input: &str, unit: char) -> String {
   let lower = &unit.to_lowercase().to_string().chars().next().unwrap();
   let upper = &unit.to_uppercase().to_string().chars().next().unwrap();
 
-  return input.chars().filter(|c| c != lower && c != upper).collect();
+  input.chars().filter(|c| c != lower && c != upper).collect()
 }
 
 fn read() -> String {
@@ -92,5 +92,5 @@ fn read() -> String {
     .read_line(&mut line)
     .expect("Cannot read the line");
 
-  return line;
+  line
 }
