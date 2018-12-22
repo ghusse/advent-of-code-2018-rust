@@ -60,15 +60,15 @@ fn solve1(coordinates: &[Point]) {
 
   let mut sizes = vec![0i32; coordinates.len()];
 
-  for x in 0..size.x {
-    for y in 0..size.y {
-      match grid[x][y] {
+  for (x, row) in grid.iter().enumerate() {
+    for (y, cell) in row.iter().enumerate() {
+      match cell {
         None => {}
         Some(point) => {
           if x == 0 || y == 0 || x == size.x - 1 || y == size.y - 1 {
-            sizes[point] = -1;
-          } else if sizes[point] != -1 {
-            sizes[point] += 1;
+            sizes[*point] = -1;
+          } else if sizes[*point] != -1 {
+            sizes[*point] += 1;
           }
         }
       }

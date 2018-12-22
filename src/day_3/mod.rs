@@ -33,18 +33,18 @@ fn solve1(claims: &[Claim]) -> Vec<Vec<u32>> {
   let mut fabric = vec![vec![0u32; SIZE]; SIZE];
 
   for claim in claims {
-    for x in claim.x..claim.x + claim.width {
-      for y in claim.y..claim.y + claim.height {
-        fabric[x][y] += 1u32;
+    for row in &mut fabric[claim.x..claim.x + claim.width] {
+      for cell in &mut row[claim.y..claim.y + claim.height] {
+        *cell += 1u32;
       }
     }
   }
 
   let mut number = 0;
 
-  for x in 0..999 {
-    for y in 0..999 {
-      if fabric[x][y] > 1 {
+  for row in fabric.iter() {
+    for cell in row.iter() {
+      if *cell > 1 {
         number += 1;
       }
     }
@@ -63,9 +63,9 @@ fn solve2(claims: &[Claim], fabric: &[Vec<u32>]) {
   });
 
   for claim in claims {
-    for x in claim.x..claim.x + claim.width {
-      for y in claim.y..claim.y + claim.height {
-        if fabric[x][y] > 1 {
+    for row in &fabric[claim.x..claim.x + claim.width] {
+      for cell in &row[claim.y..claim.y + claim.height] {
+        if *cell > 1 {
           candidate_claims.remove(&claim);
         }
       }

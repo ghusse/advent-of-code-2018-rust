@@ -50,7 +50,7 @@ fn solve1(input: &str) -> u64 {
 
   parse(current, &numbers[..]);
 
-  return sum_entries(&current);
+  sum_entries(&current)
 }
 
 fn solve2(input: &str) -> u64 {
