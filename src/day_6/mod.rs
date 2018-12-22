@@ -30,8 +30,10 @@ fn solve1(coordinates: &[Point]) {
 
   let mut grid: Vec<Vec<Option<usize>>> = vec![vec![None; size.y]; size.x];
 
+  #[allow(clippy::needless_range_loop)]
   for x in 0..size.x {
     for y in 0..size.y {
+      #[deny(clippy::needless_range_loop)]
       let measures: Vec<Distance> = coordinates
         .iter()
         .enumerate()
