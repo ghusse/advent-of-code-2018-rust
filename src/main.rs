@@ -32,7 +32,7 @@ fn main() {
         day_3::solve();
         println!();
     }
-    
+
     if args.len() == 1 || args[1].eq("4") {
         day_4::solve();
         println!();
