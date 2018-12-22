@@ -6,6 +6,12 @@ pub fn solve() {
 
     println!("Day 8 1/2 {}", result);
   });
+
+  measure_and_print(|| {
+    let result = solve2(include_str!("input.txt"));
+
+    println!("Day 8 2/2 {}", result);
+  });
 }
 
 #[cfg(test)]
@@ -17,6 +23,13 @@ mod test {
     let result = solve1(include_str!("input_test.txt"));
 
     assert_eq!(result, 138);
+  }
+
+  #[test]
+  fn test2() {
+    let result = solve2(include_str!("input_test.txt"));
+
+    assert_eq!(result, 66);
   }
 }
 
@@ -38,6 +51,21 @@ fn solve1(input: &str) -> u64 {
   parse(current, &numbers[..]);
 
   return sum_entries(&current);
+}
+
+fn solve2(input: &str) -> u64 {
+  let numbers: Vec<u64> = load(input);
+  let mut nodes: Vec<Node> = Vec::new();
+  let root = Node {
+    children: Vec::new(),
+    entries: Vec::new(),
+  };
+  nodes.push(root);
+  let current = &mut nodes[0];
+
+  parse(current, &numbers[..]);
+
+  sum_child_nodes(&current)
 }
 
 fn parse<'a>(node: &mut Node, numbers: &'a [u64]) -> &'a [u64] {
@@ -72,6 +100,21 @@ fn sum_entries(node: &Node) -> u64 {
     .iter()
     .fold(node.entries.iter().sum(), |sum, node| {
       sum + sum_entries(&node)
+    })
+}
+
+fn sum_child_nodes(node: &Node) -> u64 {
+  if node.children.is_empty() {
+    return node.entries.iter().sum();
+  }
+
+  node
+    .entries
+    .iter()
+    .filter(|entry| (**entry as usize) <= node.children.len())
+    .fold(0, |sum, entry| {
+      let child = &node.children[*entry as usize - 1];
+      sum_child_nodes(child) + sum
     })
 }
 
