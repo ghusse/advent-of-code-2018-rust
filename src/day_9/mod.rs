@@ -5,6 +5,10 @@ pub fn solve() {
   measure_and_print(|| {
     println!("Day 9 1/2 {}", solve1(419, 71052));
   });
+
+  measure_and_print(|| {
+    println!("Day 9 2/2 {}", solve1(419, 71052 * 100));
+  });
 }
 
 #[cfg(test)]
@@ -24,8 +28,8 @@ mod test {
 
 fn solve1(players: usize, marbles: usize) -> u64 {
   let mut scores: Vec<u64> = vec![0; players];
-  let mut before_list: HashMap<usize, usize> = HashMap::new();
-  let mut after_list: HashMap<usize, usize> = HashMap::new();
+  let mut before_list: HashMap<usize, usize> = HashMap::with_capacity(marbles + 1);
+  let mut after_list: HashMap<usize, usize> = HashMap::with_capacity(marbles + 1);
   let mut current = 0;
   let mut player = 0;
   before_list.insert(0, 0);
