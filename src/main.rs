@@ -7,6 +7,7 @@ extern crate regex;
 use std::env;
 
 mod day_1;
+mod day_10;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -60,9 +61,13 @@ fn main() {
         println!();
     }
 
-    
     if args.len() == 1 || args[1].eq("9") {
         day_9::solve();
+        println!();
+    }
+
+    if args.len() == 1 || args[1].eq("10") {
+        day_10::solve();
         println!();
     }
 }
