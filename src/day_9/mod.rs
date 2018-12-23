@@ -22,7 +22,7 @@ mod test {
   }
 }
 
-fn solve1<'a>(players: usize, marbles: usize) -> u64 {
+fn solve1(players: usize, marbles: usize) -> u64 {
   let mut scores: Vec<u64> = vec![0; players];
   let mut before_list: HashMap<usize, usize> = HashMap::new();
   let mut after_list: HashMap<usize, usize> = HashMap::new();
@@ -31,18 +31,18 @@ fn solve1<'a>(players: usize, marbles: usize) -> u64 {
   before_list.insert(0, 0);
   after_list.insert(0, 0);
 
-  for marble in 1..marbles + 1 {
+  for marble in 1..=marbles {
     if marble % 23 == 0 {
       scores[player] += marble as u64;
 
       for _i in 0..7 {
-        current = *before_list.get(&current).unwrap();
+        current = before_list[&current];
       }
 
       scores[player] += current as u64;
 
-      let before = *before_list.get(&current).unwrap();
-      let after = *after_list.get(&current).unwrap();
+      let before = before_list[&current];
+      let after = after_list[&current];
 
       after_list.insert(before, after);
       before_list.insert(after, before);
@@ -50,8 +50,8 @@ fn solve1<'a>(players: usize, marbles: usize) -> u64 {
       before_list.remove(&current);
       current = after;
     } else {
-      let after: usize = *after_list.get(&current).unwrap();
-      let after_after: usize = *after_list.get(&after).unwrap();
+      let after: usize = after_list[&current];
+      let after_after: usize = after_list[&after];
 
       current = marble;
       after_list.insert(after, current);
