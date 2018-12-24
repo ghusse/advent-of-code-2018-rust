@@ -10,6 +10,7 @@ mod day_1;
 mod day_10;
 mod day_11;
 mod day_12;
+mod day_13;
 mod day_2;
 mod day_3;
 mod day_4;
@@ -80,6 +81,11 @@ fn main() {
 
     if args.len() == 1 || args[1].eq("12") {
         day_12::solve();
+        println!();
+    }
+
+    if args.len() == 1 || args[1].eq("13") {
+        day_13::solve();
         println!();
     }
 }

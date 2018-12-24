@@ -11,7 +11,7 @@
             "name": "Debug 'advent' (windows)",
             "program": "${workspaceRoot}/target/debug/advent.exe",
             "args": [
-                "12"
+                "13"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
