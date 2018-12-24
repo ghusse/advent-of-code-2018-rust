@@ -1,6 +1,15 @@
+use measure::measure_and_print;
+
 pub fn solve() {
-  let (x, y) = solve1(include_str!("input.txt"));
-  println!("Day 13 1/2 {},{}", x, y);
+  measure_and_print(|| {
+    let (x, y) = solve1(include_str!("input.txt"));
+    println!("Day 13 1/2 {},{}", x, y);
+  });
+
+  measure_and_print(|| {
+    let (x, y) = solve2(include_str!("input.txt"));
+    println!("Day 13 2/2 {},{}", x, y);
+  });
 }
 
 #[cfg(test)]
@@ -13,6 +22,14 @@ mod test {
 
     assert_eq!(7, x);
     assert_eq!(3, y);
+  }
+
+  #[test]
+  fn test2() {
+    let (x, y) = solve2(include_str!("input_test2.txt"));
+
+    assert_eq!(6, x);
+    assert_eq!(4, y);
   }
 }
 
@@ -28,9 +45,20 @@ struct Cart {
   vx: i32,
   vy: i32,
   next_turn: Turn,
+  active: bool,
 }
 
 impl Cart {
+  fn new(x: usize, y: usize, vx: i32, vy: i32) -> Cart {
+    Cart {
+      x,
+      y,
+      vx,
+      vy,
+      next_turn: Turn::Left,
+      active: true,
+    }
+  }
   fn move_on(&mut self, grid: &[Vec<char>]) {
     self.x = (self.x as i32 + self.vx) as usize;
     self.y = (self.y as i32 + self.vy) as usize;
@@ -86,6 +114,7 @@ impl Cart {
 
 fn solve1(input: &str) -> (usize, usize) {
   let (mut carts, grid) = read(input);
+
   let mut carts_grid: Vec<Vec<bool>> = vec![vec![false; grid[0].len()]; grid.len()];
 
   for cart in &carts {
@@ -113,6 +142,74 @@ fn solve1(input: &str) -> (usize, usize) {
   }
 }
 
+fn solve2(input: &str) -> (usize, usize) {
+  let (mut carts, grid) = read(input);
+  let mut carts_grid: Vec<Vec<bool>> = vec![vec![false; grid[0].len()]; grid.len()];
+  let mut active = carts.len();
+
+  for cart in &carts {
+    carts_grid[cart.y][cart.x] = true;
+  }
+  #[allow(clippy::needless_range_loop)]
+  loop {
+    carts.sort_by(|cart1, cart2| {
+      if cart1.y != cart2.y {
+        return cart1.y.cmp(&cart2.y);
+      }
+
+      cart1.x.cmp(&cart2.x)
+    });
+
+    let len = carts.len();
+    for mut i in 0..len {
+      // I'm not satisfied by this solution
+      // but I cannot find a simpler one that
+      // satisfies the compilator
+      let mut same_x = 0;
+      let mut same_y = 0;
+      let mut deactivate = false;
+      {
+        let cart = &mut carts[i];
+        if !cart.active {
+          continue;
+        }
+        carts_grid[cart.y][cart.x] = false;
+
+        cart.move_on(&grid);
+
+        if !carts_grid[cart.y][cart.x] {
+          carts_grid[cart.y][cart.x] = true;
+        } else {
+          cart.active = false;
+          same_x = cart.x;
+          same_y = cart.y;
+          carts_grid[cart.y][cart.x] = false;
+          deactivate = true;
+          active -= 1;
+        }
+      }
+
+      if deactivate {
+        for j in 0..len {
+          let second = &mut carts[j];
+
+          if j != i && second.x == same_x && second.y == same_y && second.active {
+            second.active = false;
+
+            active -= 1;
+          }
+        }
+      }
+    }
+
+    if active == 1 {
+      let only = carts.iter().find(|cart| cart.active).unwrap();
+
+      return (only.x, only.y);
+    }
+  }
+}
+
 fn read(input: &str) -> (Vec<Cart>, Vec<Vec<char>>) {
   let mut carts: Vec<Cart> = Vec::new();
   let mut grid: Vec<Vec<char>> = Vec::new();
@@ -125,43 +222,19 @@ fn read(input: &str) -> (Vec<Cart>, Vec<Vec<char>>) {
 
       match value {
         '>' => {
-          carts.push(Cart {
-            x,
-            y,
-            vx: 1,
-            vy: 0,
-            next_turn: Turn::Left,
-          });
+          carts.push(Cart::new(x, y, 1, 0));
           line_value = '-';
         }
         '<' => {
-          carts.push(Cart {
-            x,
-            y,
-            vx: -1,
-            vy: 0,
-            next_turn: Turn::Left,
-          });
+          carts.push(Cart::new(x, y, -1, 0));
           line_value = '-';
         }
         'v' => {
-          carts.push(Cart {
-            x,
-            y,
-            vx: 0,
-            vy: 1,
-            next_turn: Turn::Left,
-          });
+          carts.push(Cart::new(x, y, 0, 1));
           line_value = '|';
         }
         '^' => {
-          carts.push(Cart {
-            x,
-            y,
-            vx: 0,
-            vy: -1,
-            next_turn: Turn::Left,
-          });
+          carts.push(Cart::new(x, y, 0, -1));
           line_value = '|';
         }
         _ => {}
